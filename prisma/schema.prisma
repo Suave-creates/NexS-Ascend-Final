@@ -1,0 +1,117 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  employeeCode String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model ShippingMetadata {
+  id         Int    @id @default(autoincrement())
+  shippingID String @unique
+  city       String
+  @@map("ShippingMetadata")
+}
+
+model PackingScan {
+  id         Int      @id @default(autoincrement())
+  scanId     String
+  stationId  String
+  nexsId     String
+  timestamp  DateTime @default(now())
+}
+
+model DispatchScan {
+  id         Int      @id @default(autoincrement())
+  scanId     String
+  stationId  String
+  nexsId     String
+  timestamp  DateTime @default(now())
+}
+
+model OperationsMetadata {
+  id         Int     @id @default(autoincrement())
+  locationId String  @map("location_id")
+  cityOdd    String  @map("city_odd")
+  shipToCust String? @map("ship_to_cust")
+  @@map("OperationsMetadata")
+}
+
+model MaintenanceShopIssue {
+  id          Int      @id @default(autoincrement())
+  pid         String
+  partName    String
+  quantity    Int
+  unit        String
+  rate        Float
+  category    String
+  total       Float
+  currency    String?
+  destination String
+  department  String
+   issuedAt    DateTime @default(now())
+}
+
+model FastTrackScan {
+  id         Int      @id @default(autoincrement())
+  locationID String   @map("location_id")
+  cityOdd    String   @map("city_odd")
+  time       DateTime @map("time") @default(now())
+
+  @@map("fasttrackscan")
+}
+
+model FR0Scan {
+  id           Int   @id @default(autoincrement())
+  scanId       String   
+  stationId    String
+  nexsId       String
+  createdAt    DateTime @default(now())
+}
+
+model BulkScan {
+  id         Int      @id @default(autoincrement())
+  scanId     String
+  stationId  String
+  nexsId     String
+  timestamp  DateTime @default(now())
+}
+
+model ManualWarehouse {
+  id         Int      @id @default(autoincrement())
+  scanId     String
+  stationId  String
+  nexsId     String
+  timestamp  DateTime @default(now())
+}
+
+model EHSDeviation {
+  id                    Int      @id @default(autoincrement())
+  month                 String
+  date                  DateTime @db.Date
+  timeOfRound           String
+  location              String
+  responsibleDepartment String
+  remarks               String
+  observations          String   @db.Text
+  photographBefore      String?  @db.VarChar(500)
+  controlMeasures       String   @db.Text
+  photographAfter       String?  @db.VarChar(500)
+  categorization        String   @default("Yellow")
+  remarksByDepartment   String?  @db.Text
+  complianceStatus      String   @default("Open")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([date])
+}

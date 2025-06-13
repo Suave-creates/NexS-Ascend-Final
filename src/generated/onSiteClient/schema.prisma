@@ -1,0 +1,20 @@
+// prisma/onSite.prisma
+
+datasource onSiteDB {
+  provider = "mysql"
+  url      = env("ON_SITE_DB_URL")
+}
+
+generator onSiteClient {
+  provider = "prisma-client-js"
+  output   = "../src/generated/onSiteClient"
+}
+
+model TrayMovement {
+  id        Int      @id @default(autoincrement())
+  trayId    String
+  location  String
+  timestamp DateTime
+
+  @@map("tray_movements")
+}
